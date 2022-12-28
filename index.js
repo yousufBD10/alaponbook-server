@@ -49,10 +49,39 @@ async function run(){
             res.send(post);
 
          });
+        app.get('/updateprofile', async (req,res)=>{
+            const email = req.query.email;
+            console.log(email);
+            const query = {email:email};
+            const result = await userCollection.findOne(query);
+           
+            res.send(result);
+
+         });
 
          app.post('/comments', async (req,res)=>{
             const comment = req.body;
             const result = await commentsCollection.insertOne(comment);
+            res.send(result);
+         });
+         app.put('/update/:email', async (req,res)=>{
+            const updates = req.body;
+           const filter = {email:updates.email}
+           
+            const options = {upsert: true};
+            const updateddoc = {
+                $set:{
+                 name:updates.name,
+                 workplace:updates.workplace,
+                 univerty:updates.univerty,
+                 address:updates.address,
+                 come:updates.come,
+                 relationship:updates.relationship,
+                 workplace:updates.workplace,
+                
+                }
+            }
+            const result = await userCollection.updateMany(filter,updateddoc,options);
             res.send(result);
          });
 
