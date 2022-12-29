@@ -40,6 +40,13 @@ async function run(){
             res.send(result);
           });
 
+
+          app.get('/users', async (req,res)=>{
+            const query = {};
+            const result = await userCollection.find(query).limit(5).sort({email:-1}).toArray();
+            res.send(result);
+          });
+
           
         app.get('/mediadetails/:id', async (req,res)=>{
             const id = req.params.id
@@ -64,6 +71,7 @@ async function run(){
             const result = await commentsCollection.insertOne(comment);
             res.send(result);
          });
+        
          app.put('/update/:email', async (req,res)=>{
             const updates = req.body;
            const filter = {email:updates.email}
@@ -84,6 +92,14 @@ async function run(){
             const result = await userCollection.updateMany(filter,updateddoc,options);
             res.send(result);
          });
+
+         app.post('/saveusers', async (req,res)=>{
+            const users = req.body;
+         
+            const result = await userCollection.insertOne(users);
+            res.send(result);
+         });
+
          app.put('/like', async (req,res)=>{
             const likeData = req.body;
            const filter = {_id:ObjectId(likeData._id)}
