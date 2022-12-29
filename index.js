@@ -51,7 +51,7 @@ async function run(){
          });
         app.get('/updateprofile', async (req,res)=>{
             const email = req.query.email;
-            console.log(email);
+           
             const query = {email:email};
             const result = await userCollection.findOne(query);
            
@@ -82,6 +82,20 @@ async function run(){
                 }
             }
             const result = await userCollection.updateMany(filter,updateddoc,options);
+            res.send(result);
+         });
+         app.put('/like', async (req,res)=>{
+            const likeData = req.body;
+           const filter = {_id:ObjectId(likeData._id)}
+           console.log(likeData.counter);
+            const options = {upsert: true};
+            const updateddoc = {
+                $set:{
+                like: likeData.counter,
+                
+                }
+            }
+            const result = await postCollection.updateOne(filter,updateddoc,options);
             res.send(result);
          });
 
